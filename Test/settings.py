@@ -20,9 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-a+jtz!3k&dpf+jka)!!9!*$_at*pc&ykz@vglxou6y1w506otv'
+SECRET_KEY = 'django-insecure-a+jtz!3k&dpf+jka)!!9!*$_at*pc&ykz@vglxou6y1w506otv'
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+#SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG" ,"False" ).lower() == "true"
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000','http://localhost:8000/']
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Uncomment this line if you want to force HTTPS when deploying to production
 #SECURE_SSL_REDIRECT = True 
