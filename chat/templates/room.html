@@ -1,0 +1,37 @@
+<!-- chat/templates/chat/room.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Room</title>
+</head>
+<body>
+    <h1>Chat Room: {{ room_name }}</h1>
+    <div id="chat"></div>
+
+    <script>
+        const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+
+
+        chatSocket.onopen = function (e) {
+            console.log('WebSocket connection established.');
+        };
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const message = data['message'];
+            // Handle incoming message
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        // Send message to server
+        function sendMessage(message) {
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+        }
+    </script>
+</body>
+</html>
