@@ -10,12 +10,14 @@
     <div id="chat"></div>
 
     <script>
-        const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+        const chatSocket = new WebSocket(`${ws_scheme}://` + window.location.host + '/ws/chat/');
 
 
         chatSocket.onopen = function (e) {
             console.log('WebSocket connection established.');
         };
+
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             const message = data['message'];
@@ -26,12 +28,24 @@
             console.error('Chat socket closed unexpectedly');
         };
 
+        chatSocket.onclose = function (event) {
+        console.error("WebSocket closed:", event);
+        console.error("Close code:", event.code);
+        console.error("Close reason:", event.reason);
+        };
+
+        chatSocket.onerror = function (event) {
+            console.error("WebSocket error:", event);
+        };
+
         // Send message to server
         function sendMessage(message) {
             chatSocket.send(JSON.stringify({
                 'message': message
             }));
         }
+
+
     </script>
 </body>
 </html>
