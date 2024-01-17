@@ -43,12 +43,21 @@ INSTALLED_APPS = [
     'chat'
 ]
 
+
+CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000','http://localhost:8000/']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Uncomment this line if you want to force HTTPS when deploying to production
+SECURE_SSL_REDIRECT = True 
+
+ASGI_APPLICATION = "Test.asgi.application"
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     },
 }
-ASGI_APPLICATION = "Test.asgi.application"
 
 
 MIDDLEWARE = [
