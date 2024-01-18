@@ -7,7 +7,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         await self.accept()
-        cap = cv2.VideoCapture(2)
+        cap = cv2.VideoCapture(0)
 
         while True:
             ret, frame = cap.read()
