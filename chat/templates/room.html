@@ -1,51 +1,37 @@
-<!-- chat/templates/chat/room.html -->
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat Room</title>
+    <title>OpenCV with Django Channels</title>
 </head>
 <body>
-    <h1>Chat Room: {{ room_name }}</h1>
-    <div id="chat"></div>
-
+    <h1>Video Stream</h1>
+    <img id="video-feed" src="" />
+    
     <script>
-        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-        const chatSocket = new WebSocket(`${ws_scheme}://` + window.location.host + '/ws/chat/');
+        const socket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
 
-
-        chatSocket.onopen = function (e) {
+        socket.onopen = function (e) {
             console.log('WebSocket connection established.');
         };
 
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            const message = data['message'];
-            // Handle incoming message
-        };
-
-        chatSocket.onclose = function(e) {
+        socket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
         };
 
-        chatSocket.onclose = function (event) {
+        socket.onclose = function (event) {
         console.error("WebSocket closed:", event);
         console.error("Close code:", event.code);
         console.error("Close reason:", event.reason);
         };
 
-        chatSocket.onerror = function (event) {
+        socket.onerror = function (event) {
             console.error("WebSocket error:", event);
         };
-
-        // Send message to server
-        function sendMessage(message) {
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }));
-        }
-
-
+        const videoElement = document.getElementById('video-feed');
+        socket.onmessage = function(event) {
+            videoElement.src = 'data:image/jpg;base64,' + event.data;
+        };
     </script>
 </body>
 </html>
