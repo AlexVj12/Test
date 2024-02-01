@@ -29,6 +29,7 @@
             console.error("WebSocket error:", event);
         };
         const videoElement = document.getElementById('video-feed');
+        
         socket.onmessage = function(event) {
             videoElement.src = 'data:image/jpg;base64,' + event.data;
         };
