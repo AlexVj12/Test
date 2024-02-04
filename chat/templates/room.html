@@ -1,37 +1,71 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>OpenCV with Django Channels</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Stream</title>
 </head>
 <body>
-    <h1>Video Stream</h1>
-    <img id="video-feed" src="" />
-    
+    <img id="processed-frame" width="640" height="480">
+    <button id="startCameraButton">Start Camera</button>
+    <button id="stopCameraButton" style="display: none;">Stop Camera</button>
+
     <script>
+        const processedFrameElement = document.getElementById('processed-frame');
+        const startCameraButton = document.getElementById('startCameraButton');
+        const stopCameraButton = document.getElementById('stopCameraButton');
         const socket = new WebSocket('wss://' + window.location.host + '/ws/chat/');
+        let sendFrames = false;
 
-        socket.onopen = function (e) {
-            console.log('WebSocket connection established.');
+        let captureInterval;
+
+        startCameraButton.addEventListener('click', startCamera);
+        stopCameraButton.addEventListener('click', stopCamera);
+
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then((stream) => {
+                    sendFrames = true;
+                    startCameraButton.style.display = 'none';
+                    stopCameraButton.style.display = 'inline';
+
+                    const videoElement = document.createElement('video');
+                    videoElement.srcObject = stream;
+                    videoElement.play();
+
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.width = 640;  // Ajusta según el tamaño de tu video
+                    canvas.height = 480;
+
+                    captureInterval = setInterval(() => {
+                        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                        const frameData = canvas.toDataURL('image/jpeg');
+                        socket.send(JSON.stringify({ type: 'frame', data: frameData }));
+                    }, 100);
+                })
+                .catch((error) => {
+                    console.error('Error accessing camera:', error);
+                });
+        }
+
+        function stopCamera() {
+            sendFrames = false;
+            startCameraButton.style.display = 'inline';
+            stopCameraButton.style.display = 'none';
+
+            clearInterval(captureInterval);
+        }
+
+        socket.onmessage = (event) => {
+            const frameData = event.data;
+
+            // Actualiza el contenido de la imagen con el frame procesado
+            processedFrameElement.src = 'data:image/jpg;base64,' + frameData;
         };
 
-        socket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-        };
-
-        socket.onclose = function (event) {
-        console.error("WebSocket closed:", event);
-        console.error("Close code:", event.code);
-        console.error("Close reason:", event.reason);
-        };
-
-        socket.onerror = function (event) {
-            console.error("WebSocket error:", event);
-        };
-        const videoElement = document.getElementById('video-feed');
-        
-        socket.onmessage = function(event) {
-            videoElement.src = 'data:image/jpg;base64,' + event.data;
+        socket.onclose = (event) => {
+            console.error('WebSocket closed:', event);
         };
     </script>
 </body>

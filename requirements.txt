@@ -36,10 +36,6 @@ incremental==22.10.0
 kiwisolver==1.4.5
 lxml==5.1.0
 matplotlib==3.8.2
-<<<<<<< HEAD
-mediapipe==0.10.9
-=======
->>>>>>> 506645b (Code Review)
 numpy==1.26.3
 opencv-contrib-python==4.9.0.80
 opencv-python==4.9.0.80
