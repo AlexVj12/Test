@@ -20,6 +20,7 @@ cycler==0.12.1
 daphne==4.0.0
 dj-database-url==2.1.0
 Django==5.0.1
+django-livereload-server==0.5.1
 django-widget-tweaks==1.5.0
 djangorestframework==3.14.0
 exceptiongroup==1.2.0
@@ -36,6 +37,7 @@ incremental==22.10.0
 kiwisolver==1.4.5
 lxml==5.1.0
 matplotlib==3.8.2
+mediapipe==0.10.9
 numpy==1.26.3
 opencv-contrib-python==4.9.0.80
 opencv-python==4.9.0.80
@@ -69,6 +71,7 @@ sounddevice==0.4.6
 sqlparse==0.4.4
 svglib==1.5.1
 tinycss2==1.2.1
+tornado==6.4
 Twisted==23.10.0
 txaio==23.1.1
 typing_extensions==4.9.0
@@ -83,4 +86,3 @@ websockets==12.0
 whitenoise==6.6.0
 xhtml2pdf==0.2.13
 zope.interface==6.1
-
